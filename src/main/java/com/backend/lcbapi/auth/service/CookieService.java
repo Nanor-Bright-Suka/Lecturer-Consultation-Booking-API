@@ -20,7 +20,7 @@ public class CookieService {
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(false) // change to true in production with HTTPS
+                .secure(true) // change to true in production with HTTPS
                 .path("/")
                 .maxAge(Duration.ofDays(securityEnvironment.getRefreshTokenExpirationInDays()))
                 .sameSite("Lax")

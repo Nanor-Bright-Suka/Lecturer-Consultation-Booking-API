@@ -33,5 +33,7 @@ public class RefreshTokenEntity {
     private UserEntity user;
 
     @Column(nullable = false)
-    private Boolean isRevoked;
+    private Boolean revoked;
+
+    private Instant revokedAt;
 }

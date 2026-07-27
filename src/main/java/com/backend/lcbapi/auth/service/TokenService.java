@@ -97,7 +97,7 @@ public class TokenService {
                 .tokenHash(tokenHash)
                 .expiresAt(Instant.now().plus(securityEnvironment.getRefreshTokenExpirationInDays(), ChronoUnit.DAYS))
                 .createdAt(Instant.now())
-                .isRevoked(false)
+                .revoked(false)
                 .build();
         return new RefreshTokenResponseDto(plainToken, refreshToken);
     }

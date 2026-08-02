@@ -64,6 +64,7 @@ public class Roles implements ApplicationRunner {
                 PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
                 PermissionEnum.UPDATE_AVAILABILITY_WINDOW,
                 PermissionEnum.DELETE_AVAILABILITY_WINDOW
+
         );
 
 

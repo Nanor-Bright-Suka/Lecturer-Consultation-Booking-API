@@ -1,10 +1,11 @@
 package com.backend.lcbapi.auth.entity;
 
 
+import com.backend.lcbapi.awmodule.entity.AvailabilityWindowEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+import java.util.*;
 
 @Table(name = "lecturer")
 @Getter
@@ -27,6 +28,7 @@ public class LecturerEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private UserEntity user;
+
 
 
 }

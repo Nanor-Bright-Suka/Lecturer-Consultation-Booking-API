@@ -1,4 +1,4 @@
-package com.backend.lcbapi.auth.utility;
+package com.backend.lcbapi.shared.utility;
 
 
 import org.springframework.stereotype.Component;
@@ -22,6 +22,11 @@ public class Utility {
             throw new RuntimeException("Error hashing token", e);
         }
     }
+
+
+
+
+
 
 
 

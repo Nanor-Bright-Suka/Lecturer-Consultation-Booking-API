@@ -27,7 +27,6 @@ public class UserEntity {
 
      private String lastName;
 
-     @Column(unique = true)
      private String email;
 
      private String password;
@@ -39,6 +38,7 @@ public class UserEntity {
     )
     @Builder.Default
     private Set<RefreshTokenEntity> refreshTokens = new HashSet<>();
+
 
 
     @ManyToMany(fetch = FetchType.EAGER)

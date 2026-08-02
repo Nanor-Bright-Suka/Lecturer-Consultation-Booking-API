@@ -6,27 +6,23 @@ import com.backend.lcbapi.auth.dto.request.StudentRegisterRequestDto;
 import com.backend.lcbapi.auth.dto.response.LoginResponseDto;
 import com.backend.lcbapi.auth.dto.response.RefreshTokenResponseDto;
 import com.backend.lcbapi.auth.dto.response.StudentRegisterResponseDto;
-import com.backend.lcbapi.auth.entity.RefreshTokenEntity;
 import com.backend.lcbapi.auth.entity.RoleEntity;
 import com.backend.lcbapi.auth.entity.StudentEntity;
 import com.backend.lcbapi.auth.entity.UserEntity;
 import com.backend.lcbapi.auth.enums.RoleEnum;
-import com.backend.lcbapi.auth.exceptions.InvalidCredentialException;
-import com.backend.lcbapi.auth.exceptions.NotFoundException;
-import com.backend.lcbapi.auth.exceptions.ResourceAlreadyExistException;
+import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
+import com.backend.lcbapi.shared.exceptions.NotFoundException;
+import com.backend.lcbapi.shared.exceptions.ResourceAlreadyExistException;
 import com.backend.lcbapi.auth.mapper.StudentMapper;
-import com.backend.lcbapi.auth.repo.RefreshTokenRepository;
 import com.backend.lcbapi.auth.repo.RoleRepository;
 import com.backend.lcbapi.auth.repo.StudentRepository;
 import com.backend.lcbapi.auth.repo.UserRepository;
-import com.backend.lcbapi.auth.utility.Utility;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Service

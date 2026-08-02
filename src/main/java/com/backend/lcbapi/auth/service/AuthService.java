@@ -3,9 +3,9 @@ package com.backend.lcbapi.auth.service;
 
 import com.backend.lcbapi.auth.dto.response.RefreshTokenResponseDto;
 import com.backend.lcbapi.auth.entity.RefreshTokenEntity;
-import com.backend.lcbapi.auth.exceptions.InvalidCredentialException;
+import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.auth.repo.RefreshTokenRepository;
-import com.backend.lcbapi.auth.utility.Utility;
+import com.backend.lcbapi.shared.utility.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

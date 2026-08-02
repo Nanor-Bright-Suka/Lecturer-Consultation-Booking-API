@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Clock;
+import java.time.ZoneId;
+
 
 @Configuration
 public class BeansConfig {
@@ -15,5 +18,7 @@ public class BeansConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public Clock clock() {return Clock.system(ZoneId.of("Africa/Accra"));}
 
 }

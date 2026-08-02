@@ -1,4 +1,4 @@
-package com.backend.lcbapi.auth.exceptions;
+package com.backend.lcbapi.shared.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

@@ -4,16 +4,14 @@ import com.backend.lcbapi.auth.config.SecurityEnvironment;
 import com.backend.lcbapi.auth.entity.RoleEntity;
 import com.backend.lcbapi.auth.entity.UserEntity;
 import com.backend.lcbapi.auth.enums.RoleEnum;
-import com.backend.lcbapi.auth.exceptions.NotFoundException;
+import com.backend.lcbapi.shared.exceptions.NotFoundException;
 import com.backend.lcbapi.auth.repo.RoleRepository;
 import com.backend.lcbapi.auth.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

@@ -5,7 +5,7 @@ import com.backend.lcbapi.auth.entity.PermissionEntity;
 import com.backend.lcbapi.auth.entity.RoleEntity;
 import com.backend.lcbapi.auth.enums.PermissionEnum;
 import com.backend.lcbapi.auth.enums.RoleEnum;
-import com.backend.lcbapi.auth.exceptions.NotFoundException;
+import com.backend.lcbapi.shared.exceptions.NotFoundException;
 import com.backend.lcbapi.auth.repo.PermissionRepository;
 import com.backend.lcbapi.auth.repo.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,15 +39,16 @@ public class Roles implements ApplicationRunner {
                 ));
 
         add(normalUser,
-                PermissionEnum.READ_PROFILE
+                PermissionEnum.READ_PROFILE,
+                PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
+                PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS
 
 
 
         );
 
 
-        // PROPERTY MANAGER
-        RoleEntity hotelManager = roleRepository.findByRoleName(RoleEnum.ROLE_LECTURER)
+        RoleEntity lecturer = roleRepository.findByRoleName(RoleEnum.ROLE_LECTURER)
                 .orElseGet(() -> roleRepository.save(
                         RoleEntity.builder()
                                 .id(UUID.randomUUID())
@@ -56,8 +57,13 @@ public class Roles implements ApplicationRunner {
                                 .build()
                 ));
 
-        add(hotelManager,
-                PermissionEnum.CREATE_PROFILE
+        add(lecturer,
+                PermissionEnum.CREATE_PROFILE,
+                PermissionEnum.CREATE_AVAILABILITY_WINDOW,
+                PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
+                PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
+                PermissionEnum.UPDATE_AVAILABILITY_WINDOW,
+                PermissionEnum.DELETE_AVAILABILITY_WINDOW
         );
 
 

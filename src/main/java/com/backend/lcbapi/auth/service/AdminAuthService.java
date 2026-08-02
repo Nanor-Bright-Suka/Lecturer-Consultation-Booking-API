@@ -6,7 +6,7 @@ import com.backend.lcbapi.auth.dto.response.LoginResponseDto;
 import com.backend.lcbapi.auth.dto.response.RefreshTokenResponseDto;
 import com.backend.lcbapi.auth.entity.UserEntity;
 import com.backend.lcbapi.auth.enums.RoleEnum;
-import com.backend.lcbapi.auth.exceptions.InvalidCredentialException;
+import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.auth.repo.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

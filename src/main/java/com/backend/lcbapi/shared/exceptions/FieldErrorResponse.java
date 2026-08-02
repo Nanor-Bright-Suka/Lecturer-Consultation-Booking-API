@@ -1,4 +1,4 @@
-package com.backend.lcbapi.auth.exceptions;
+package com.backend.lcbapi.shared.exceptions;
 
 public record FieldErrorResponse(
         String field,

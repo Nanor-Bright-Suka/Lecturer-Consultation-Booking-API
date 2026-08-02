@@ -2,11 +2,10 @@ package com.backend.lcbapi.auth.service;
 
 
 import com.backend.lcbapi.auth.dto.response.RefreshTokenResponseDto;
-import com.backend.lcbapi.auth.utility.Utility;
+import com.backend.lcbapi.shared.utility.Utility;
 import com.backend.lcbapi.auth.config.SecurityEnvironment;
 import com.backend.lcbapi.auth.entity.RefreshTokenEntity;
 import com.backend.lcbapi.auth.entity.UserEntity;
-import com.backend.lcbapi.auth.repo.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -67,7 +66,7 @@ public class TokenService {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractSubject(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

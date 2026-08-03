@@ -1,5 +1,6 @@
 package com.backend.lcbapi.awmodule.dto.response;
 
+import com.backend.lcbapi.awmodule.enums.AvailabilityModeEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class AvailabilityWindowResponseDto {
     private LocalTime startTime;
 
     private LocalTime endTime;
+
+    private AvailabilityModeEnum availabilityMode;
 
     private Integer slotDuration;
 

@@ -7,18 +7,15 @@ import com.backend.lcbapi.auth.dto.response.LoginResponseDto;
 import com.backend.lcbapi.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.service.SecurityService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -62,7 +59,6 @@ public class AuthController {
 
         return ResponseEntity.ok(new LoginResponseDto(result.get("accessToken")));
     }
-
 
 
 

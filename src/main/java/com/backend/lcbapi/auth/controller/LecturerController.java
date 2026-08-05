@@ -23,14 +23,14 @@ public class LecturerController {
 
     private final LecturerAuthService lecturerAuthService;
 
-    @PostMapping("/staff/register")
+    @PostMapping("/lecturer/register")
     public ResponseEntity<LecturerRegistrationResponseDto> register(@Valid @RequestBody LecturerRegistrationRequestDto request){
         LecturerRegistrationResponseDto response = lecturerAuthService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
-    @PostMapping("/staff/login")
+    @PostMapping("/lecturer/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request, HttpServletResponse response) {
         LoginResponseDto loginResponse =  lecturerAuthService.login(request, response);
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);

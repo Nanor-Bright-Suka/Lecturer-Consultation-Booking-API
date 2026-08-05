@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final Utility utility;
     private final TokenService tokenService;
+
 
 
     @Transactional
@@ -71,9 +73,6 @@ public class AuthService {
         );
 
     }
-
-
-
 
 
 

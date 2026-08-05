@@ -26,4 +26,6 @@ List<AvailabilityWindowEntity> findAllByLecturerIdAndStatus(UUID lecturerId, Ava
 
     Optional<AvailabilityWindowEntity> findByIdAndStatus(UUID id, AvailabilityWindowStatusEnum status);
 
+    void deleteByLecturerId(UUID id);
+
 }

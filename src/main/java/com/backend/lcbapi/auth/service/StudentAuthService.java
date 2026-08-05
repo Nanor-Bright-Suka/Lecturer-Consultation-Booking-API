@@ -6,10 +6,13 @@ import com.backend.lcbapi.auth.dto.request.StudentRegisterRequestDto;
 import com.backend.lcbapi.auth.dto.response.LoginResponseDto;
 import com.backend.lcbapi.auth.dto.response.RefreshTokenResponseDto;
 import com.backend.lcbapi.auth.dto.response.StudentRegisterResponseDto;
+import com.backend.lcbapi.auth.entity.LecturerEntity;
 import com.backend.lcbapi.auth.entity.RoleEntity;
 import com.backend.lcbapi.auth.entity.StudentEntity;
 import com.backend.lcbapi.auth.entity.UserEntity;
 import com.backend.lcbapi.auth.enums.RoleEnum;
+import com.backend.lcbapi.awmodule.repo.AvailabilityWindowRepo;
+import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
 import com.backend.lcbapi.shared.exceptions.ResourceAlreadyExistException;
@@ -23,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,7 +40,8 @@ public class StudentAuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     private final CookieService cookieService;
-
+    private final AvailabilityWindowRepo availabilityWindowRepo;
+    private final BookableSlotRepo bookableSlotRepo;
 
 
     public StudentRegisterResponseDto register(StudentRegisterRequestDto request) {
@@ -86,6 +91,7 @@ public class StudentAuthService {
                 .orElseThrow(() -> new InvalidCredentialException("Invalid credentials."));
 
         UserEntity user = student.getUser();
+
         boolean passwordMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!passwordMatch) {
@@ -104,6 +110,31 @@ public class StudentAuthService {
         return new LoginResponseDto (accessToken);
     }
 
+
+
+//    @Transactional
+//    public UserEntity deleteUserService(UUID userId) {
+//
+//        UserEntity user = userRepository.findById(userId)
+//                .orElseThrow(() -> new NotFoundException("User not found"));
+//
+//
+//        LecturerEntity lecturer = user.getLecturer();
+//
+//        if (lecturer != null) {
+//
+//            List<UUID> availabilityIds = availabilityWindowRepo.findIdsByLecturerId(lecturer.getId());
+//
+//            bookableSlotRepo.deleteByAvailabilityWindowIdIn(availabilityIds);
+//
+//            availabilityWindowRepo.deleteByLecturerId(lecturer.getId());
+//        }
+//
+//
+//        userRepository.delete(user);
+//
+//        return user;
+//    }
 
 
 

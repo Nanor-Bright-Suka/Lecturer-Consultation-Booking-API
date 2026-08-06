@@ -112,31 +112,25 @@ public class StudentAuthService {
 
 
 
-//    @Transactional
-//    public UserEntity deleteUserService(UUID userId) {
-//
-//        UserEntity user = userRepository.findById(userId)
-//                .orElseThrow(() -> new NotFoundException("User not found"));
-//
-//
-//        LecturerEntity lecturer = user.getLecturer();
-//
-//        if (lecturer != null) {
-//
-//            List<UUID> availabilityIds = availabilityWindowRepo.findIdsByLecturerId(lecturer.getId());
-//
-//            bookableSlotRepo.deleteByAvailabilityWindowIdIn(availabilityIds);
-//
-//            availabilityWindowRepo.deleteByLecturerId(lecturer.getId());
-//        }
-//
-//
-//        userRepository.delete(user);
-//
-//        return user;
-//    }
+    @Transactional
+    public UserEntity deleteUserService(UUID userId) {
 
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
+        LecturerEntity lecturer = user.getLecturer();
+
+        if (lecturer != null) {
+
+            bookableSlotRepo.deleteByAvailabilityWindowLecturerId(lecturer.getId());
+
+            availabilityWindowRepo.deleteByLecturerId(lecturer.getId());
+        }
+
+        userRepository.delete(user);
+
+        return user;
+    }
 
 
 

@@ -38,14 +38,14 @@ public class StudentController {
     }
 
 
-//    @DeleteMapping("/{userId}")
-//    public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
-//
-//        UserEntity user =   studentAuthService.deleteUserService(userId);
-//
-//        return ResponseEntity.ok(user);
-//    }
-//
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
+
+      studentAuthService.deleteUserService(userId);
+
+        return ResponseEntity.ok("Deleted successfully");
+    }
+
 
 
 

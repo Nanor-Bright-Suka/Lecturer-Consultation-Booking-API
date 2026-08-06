@@ -12,6 +12,5 @@ public interface BookableSlotRepo extends JpaRepository<BookableSlotEntity, UUID
     List<BookableSlotEntity> findAllByAvailabilityWindowId(UUID availabilityWindowId);
     void deleteAllByAvailabilityWindowIdAndStatus(UUID availabilityWindowId, BookableSlotStatusEnum status);
     boolean existsByAvailabilityWindowIdAndStatusNot(UUID availabilityWindowId, BookableSlotStatusEnum status);
-    void deleteByAvailabilityWindowIdIn(List<UUID> ids);
-
+    void deleteByAvailabilityWindowLecturerId(UUID lecturerId);
 }

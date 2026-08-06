@@ -1,6 +1,10 @@
 package com.backend.lcbapi.shared.exceptions;
 
 import com.backend.lcbapi.auth.dto.response.ApiResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,24 +80,47 @@ public class GlobalHandler {
 
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
-//        return ResponseEntity.status(500).body(new ApiErrorResponse(500, "Internal server error", request.getRequestURI()
-//        ));
-//    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiErrorResponse> handleExpiredJwtException(ExpiredJwtException ex, HttpServletRequest request) {
+        return ResponseEntity.status(401).body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Token has expired", request.getRequestURI()));
+
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ApiErrorResponse> handleMalformedJwtException(MalformedJwtException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Malformed token",  request.getRequestURI()));
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ApiErrorResponse> handleSignatureException(SignatureException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid token signature", request.getRequestURI()));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiErrorResponse> handleJwtException(JwtException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid access token", request.getRequestURI()));
+    }
+
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleException(Exception e) {
-
-        e.printStackTrace();
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse(
-                        Instant.now(),
-                        500,
-                        e.getMessage()
-                ));
+    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
+        return ResponseEntity.status(500).body(new ApiErrorResponse(500, "Internal server error", request.getRequestURI()
+        ));
     }
+
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse> handleException(Exception e) {
+//
+//        e.printStackTrace();
+//
+//        return ResponseEntity
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(new ApiResponse(
+//                        Instant.now(),
+//                        500,
+//                        e.getMessage()
+//                ));
+//    }
 
 }

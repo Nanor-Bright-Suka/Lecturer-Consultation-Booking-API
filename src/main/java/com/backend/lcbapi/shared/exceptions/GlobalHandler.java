@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,6 +19,7 @@ import java.util.List;
 
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -103,24 +105,27 @@ public class GlobalHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
-        return ResponseEntity.status(500).body(new ApiErrorResponse(500, "Internal server error", request.getRequestURI()
-        ));
-    }
-
 //    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse> handleException(Exception e) {
-//
-//        e.printStackTrace();
-//
-//        return ResponseEntity
-//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body(new ApiResponse(
-//                        Instant.now(),
-//                        500,
-//                        e.getMessage()
-//                ));
+//    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
+//        return ResponseEntity.status(500).body(new ApiErrorResponse(500, "Internal server error", request.getRequestURI()
+//        ));
 //    }
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse> handleException(Exception e) {
+
+        e.printStackTrace();
+
+        log.error("Unhandled exception", e);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(
+                        Instant.now(),
+                        500,
+                        e.getMessage()
+                ));
+    }
 
 }

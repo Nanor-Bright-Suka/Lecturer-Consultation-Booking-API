@@ -2,6 +2,7 @@ package com.backend.lcbapi.awmodule.entity;
 
 
 import com.backend.lcbapi.awmodule.enums.BookableSlotStatusEnum;
+import com.backend.lcbapi.booking.entity.BookingEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

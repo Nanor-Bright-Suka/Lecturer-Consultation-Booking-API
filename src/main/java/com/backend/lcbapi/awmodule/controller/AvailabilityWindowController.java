@@ -25,6 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AvailabilityWindowController {
 
+
     private final AvailabilityWindowService availabilityWindowService;
     private final BookableSlotService bookableSlotService;
 

@@ -1,9 +1,12 @@
 package com.backend.lcbapi.auth.entity;
 
 
+import com.backend.lcbapi.booking.entity.BookingEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "student")
@@ -24,5 +27,10 @@ public class StudentEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private UserEntity user;
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private List<BookingEntity> bookings = new ArrayList<>();
+
+
 
 }

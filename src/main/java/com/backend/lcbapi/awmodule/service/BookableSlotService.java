@@ -28,7 +28,7 @@ import java.util.UUID;
 public class BookableSlotService {
 
     private final AvailabilityWindowRepo availabilityWindowRepo;
-    private final LecturerServiceContext lecturerServiceContext;
+    private final RoleContextService roleContextService;
     private final BookableSlotRepo bookableSlotRepo;
     private final BookableSlotMapper bookableSlotMapper;
 
@@ -66,7 +66,7 @@ public class BookableSlotService {
     @Transactional(readOnly = true)
     public List<BookableSlotResponseDto> getSlotsByAvailabilityWindow(UUID availabilityId) {
 
-        LecturerEntity lecturer = lecturerServiceContext.getCurrentLecturer();
+        LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
         AvailabilityWindowEntity availabilityWindow = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)
                 .orElseThrow(() -> new NotFoundException("Availability window not found"));

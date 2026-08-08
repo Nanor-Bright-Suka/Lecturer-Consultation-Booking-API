@@ -2,8 +2,6 @@ package com.backend.lcbapi.awmodule.service;
 
 
 import com.backend.lcbapi.auth.entity.LecturerEntity;
-import com.backend.lcbapi.auth.repo.LecturerRepository;
-import com.backend.lcbapi.auth.service.AuthenticatedUserService;
 import com.backend.lcbapi.awmodule.dto.request.CreateAvailabilityWindowRequestDto;
 import com.backend.lcbapi.awmodule.dto.request.UpdateAvailabilityRequestDto;
 import com.backend.lcbapi.awmodule.dto.response.AvailabilityWindowResponseDto;
@@ -18,7 +16,7 @@ import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.shared.exceptions.ForbiddenException;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
-import com.backend.lcbapi.shared.exceptions.ResourceAlreadyExistException;
+import com.backend.lcbapi.shared.exceptions.ConflictException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,7 @@ import java.util.UUID;
 public class AvailabilityWindowService {
 
     private final Clock clock;
-    private final LecturerServiceContext lecturerServiceContext;
+    private final RoleContextService roleContextService;
     private final AvailabilityWindowRepo availabilityWindowRepo;
     private final AvailabilityWindowMapper availabilityWindowMapper;
     private final BookableSlotService bookableSlotService;
@@ -48,12 +46,12 @@ public class AvailabilityWindowService {
 
         validateModeRequirements(request);
 
-        LecturerEntity loggedInLecturer = lecturerServiceContext.getCurrentLecturer();
+        LecturerEntity loggedInLecturer = roleContextService.getCurrentLecturer();
 
         boolean exists = availabilityWindowRepo.existsConflict(loggedInLecturer.getId(), request.getDate(), request.getStartTime(), request.getEndTime());
 
         if (exists) {
-            throw new ResourceAlreadyExistException("You already have an availability window during this time");
+            throw new ConflictException("You already have an availability window during this time");
         }
 
 
@@ -154,7 +152,7 @@ public class AvailabilityWindowService {
 
     @Transactional(readOnly = true)
     public List<AvailabilityWindowResponseDto> getMyAvailabilityWindowsService() {
-        LecturerEntity lecturer = lecturerServiceContext.getCurrentLecturer();
+        LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
         List<AvailabilityWindowEntity> windows = availabilityWindowRepo.findAllByLecturerIdAndStatus(lecturer.getId(), AvailabilityWindowStatusEnum.ACTIVE);
 
@@ -174,7 +172,7 @@ public class AvailabilityWindowService {
     @Transactional
     public AvailabilityWindowResponseDto updateAvailabilityWindow(UUID availabilityId, UpdateAvailabilityRequestDto request) {
 
-        LecturerEntity lecturer = lecturerServiceContext.getCurrentLecturer();
+        LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
         AvailabilityWindowEntity window = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)
                         .orElseThrow(() -> new NotFoundException("Availability window not found"));
@@ -335,7 +333,7 @@ public class AvailabilityWindowService {
     @Transactional
     public void deleteAvailabilityWindow(UUID availabilityId) {
 
-        LecturerEntity lecturer = lecturerServiceContext.getCurrentLecturer();
+        LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
 
         AvailabilityWindowEntity window = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)

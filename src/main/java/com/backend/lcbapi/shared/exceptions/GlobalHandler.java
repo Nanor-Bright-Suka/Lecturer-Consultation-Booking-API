@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -64,8 +65,8 @@ public class GlobalHandler {
 
     }
 
-    @ExceptionHandler(ResourceAlreadyExistException.class)
-    public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExistException(ResourceAlreadyExistException ex, HttpServletRequest request) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExistException(ConflictException ex, HttpServletRequest request) {
         return ResponseEntity.status(409).body(new ApiErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), request.getRequestURI()));
 
     }
@@ -104,6 +105,11 @@ public class GlobalHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid access token", request.getRequestURI()));
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiErrorResponse(HttpStatus.FORBIDDEN.value(), "Access Denied", request.getRequestURI()));
+    }
+
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
@@ -122,8 +128,7 @@ public class GlobalHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse(
-                        Instant.now(),
-                        500,
+                        Instant.now(), 500,
                         e.getMessage()
                 ));
     }

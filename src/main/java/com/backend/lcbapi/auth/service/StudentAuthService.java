@@ -15,7 +15,7 @@ import com.backend.lcbapi.awmodule.repo.AvailabilityWindowRepo;
 import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
-import com.backend.lcbapi.shared.exceptions.ResourceAlreadyExistException;
+import com.backend.lcbapi.shared.exceptions.ConflictException;
 import com.backend.lcbapi.auth.mapper.StudentMapper;
 import com.backend.lcbapi.auth.repo.RoleRepository;
 import com.backend.lcbapi.auth.repo.StudentRepository;
@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -47,11 +46,11 @@ public class StudentAuthService {
     public StudentRegisterResponseDto register(StudentRegisterRequestDto request) {
 
             if (userRepository.existsByEmail(request.getEmail())) {
-                throw new ResourceAlreadyExistException("Email already exists");
+                throw new ConflictException("Email already exists");
             }
 
             if (studentRepository.existsByStudentId(request.getStudentId())) {
-                throw new ResourceAlreadyExistException("Student ID already exists");
+                throw new ConflictException("Student ID already exists");
             }
 
             RoleEntity studentRole = roleRepository.findByRoleName(RoleEnum.ROLE_STUDENT)

@@ -4,8 +4,8 @@ public enum BookableSlotStatusEnum {
 
     AVAILABLE,
     BOOKED,
-    COMPLETED,
-    CANCELLED
+    COMPLETED
+
 
 
 }

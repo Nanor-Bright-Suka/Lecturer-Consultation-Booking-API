@@ -41,7 +41,8 @@ public class Roles implements ApplicationRunner {
         add(normalUser,
                 PermissionEnum.READ_PROFILE,
                 PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
-                PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS
+                PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
+                PermissionEnum.CREATE_BOOKING
 
 
 

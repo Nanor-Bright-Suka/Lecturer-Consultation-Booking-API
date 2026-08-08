@@ -12,7 +12,7 @@ import com.backend.lcbapi.auth.entity.UserEntity;
 import com.backend.lcbapi.auth.enums.RoleEnum;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
-import com.backend.lcbapi.shared.exceptions.ResourceAlreadyExistException;
+import com.backend.lcbapi.shared.exceptions.ConflictException;
 import com.backend.lcbapi.auth.mapper.LecturerMapper;
 import com.backend.lcbapi.auth.repo.LecturerRepository;
 import com.backend.lcbapi.auth.repo.RoleRepository;
@@ -42,11 +42,11 @@ public class LecturerAuthService {
     public LecturerRegistrationResponseDto register(LecturerRegistrationRequestDto request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ResourceAlreadyExistException("Email already exists");
+            throw new ConflictException("Email already exists");
         }
 
         if (lecturerRepository.existsByStaffId(request.getStaffId())) {
-            throw new ResourceAlreadyExistException("Staff ID already exists");
+            throw new ConflictException("Staff ID already exists");
         }
 
         RoleEntity studentRole = roleRepository.findByRoleName(RoleEnum.ROLE_LECTURER)

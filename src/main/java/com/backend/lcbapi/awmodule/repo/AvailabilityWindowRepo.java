@@ -22,10 +22,49 @@ public interface AvailabilityWindowRepo extends JpaRepository<AvailabilityWindow
 """)
     boolean existsConflict(UUID lecturerId, LocalDate date, LocalTime startTime, LocalTime endTime);
 
-List<AvailabilityWindowEntity> findAllByLecturerIdAndStatus(UUID lecturerId, AvailabilityWindowStatusEnum status);
+    List<AvailabilityWindowEntity> findAllByLecturerId(UUID lecturerId);
 
-    Optional<AvailabilityWindowEntity> findByIdAndStatus(UUID id, AvailabilityWindowStatusEnum status);
+    Optional<AvailabilityWindowEntity> findById(UUID id);
 
     void deleteByLecturerId(UUID id);
+
+    @Query("""
+        SELECT a
+        FROM AvailabilityWindowEntity a
+        WHERE a.status = :status
+          AND (
+                a.date < :currentDate
+                OR (
+                    a.date = :currentDate
+                    AND a.startTime <= :currentTime
+                )
+              )
+        """)
+    List<AvailabilityWindowEntity> findWindowsReadyToStart(
+            AvailabilityWindowStatusEnum status,
+            LocalDate currentDate,
+            LocalTime currentTime);
+
+
+    @Query("""
+        SELECT a
+        FROM AvailabilityWindowEntity a
+        WHERE a.status = :status
+          AND (
+                a.date < :currentDate
+                OR (
+                    a.date = :currentDate
+                    AND a.endTime <= :currentTime
+                )
+              )
+        """)
+    List<AvailabilityWindowEntity> findWindowsReadyToEnd(
+            AvailabilityWindowStatusEnum status,
+            LocalDate currentDate,
+            LocalTime currentTime
+    );
+
+
+
 
 }

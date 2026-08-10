@@ -49,7 +49,7 @@ public class BookableSlotService {
            slot.setDate(availabilityWindow.getDate());
            slot.setStartTime(currentStart);
            slot.setEndTime(currentEnd);
-           slot.setStatus(BookableSlotStatusEnum.AVAILABLE);
+           slot.setStatus(BookableSlotStatusEnum.OPENED);
            slot.setAvailabilityWindow(availabilityWindow);
            slot.setCreatedAt(Instant.now());
            slot.setUpdatedAt(Instant.now());
@@ -68,7 +68,7 @@ public class BookableSlotService {
 
         LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
-        AvailabilityWindowEntity availabilityWindow = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)
+        AvailabilityWindowEntity availabilityWindow = availabilityWindowRepo.findById(availabilityId)
                 .orElseThrow(() -> new NotFoundException("Availability window not found"));
 
 

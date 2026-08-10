@@ -36,6 +36,9 @@ public class BookableSlotEntity {
     @Column(nullable = false)
     private BookableSlotStatusEnum status;
 
+    @OneToOne(mappedBy = "slot")
+    private BookingEntity booking;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "availability_window_id", nullable = false)
     private AvailabilityWindowEntity availabilityWindow;

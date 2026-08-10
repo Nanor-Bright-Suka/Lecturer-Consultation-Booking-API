@@ -2,6 +2,7 @@ package com.backend.lcbapi.awmodule.dto.request;
 
 
 import com.backend.lcbapi.awmodule.enums.AvailabilityModeEnum;
+import com.backend.lcbapi.awmodule.enums.AvailabilityWindowStatusEnum;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;

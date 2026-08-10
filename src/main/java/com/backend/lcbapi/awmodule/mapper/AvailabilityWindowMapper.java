@@ -38,6 +38,7 @@ public class AvailabilityWindowMapper {
                 .startTime(entity.getStartTime())
                 .endTime(entity.getEndTime())
                 .slotDuration(entity.getSlotDuration())
+                .status(entity.getStatus())
                 .availabilityMode(entity.getMode())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

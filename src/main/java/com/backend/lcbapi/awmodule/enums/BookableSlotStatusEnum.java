@@ -2,9 +2,9 @@ package com.backend.lcbapi.awmodule.enums;
 
 public enum BookableSlotStatusEnum {
 
-    AVAILABLE,
+    OPENED,
     BOOKED,
-    COMPLETED
+    CLOSED
 
 
 

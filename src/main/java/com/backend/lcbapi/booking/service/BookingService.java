@@ -45,7 +45,7 @@ public class BookingService {
         StudentEntity student = roleContextService.getCurrentStudent();
 
         // 2. Get and lock the selected slot
-        BookableSlotEntity slot = bookableSlotRepo.findById(slotId)
+        BookableSlotEntity slot = bookableSlotRepo.findByIdForUpdate(slotId)
                         .orElseThrow(() -> new NotFoundException("Bookable slot not found"));
 
         // 3. Slot must be AVAILABLE
@@ -90,7 +90,7 @@ public class BookingService {
 
     private void validateSlotAvailability(BookableSlotEntity slot) {
 
-        if (slot.getStatus() != BookableSlotStatusEnum.AVAILABLE) {
+        if (slot.getStatus() != BookableSlotStatusEnum.OPENED) {
 
             throw new ConflictException("Bookable slot is not available");
         }
@@ -109,7 +109,7 @@ public class BookingService {
         LocalDateTime now = LocalDateTime.now(clock);
 
         if (!now.isBefore(windowStart)) {
-            throw new ConflictException("Booking is no longer allowed because the availability window has started");
+            throw new ConflictException("Booking is no longer allowed because the availability window is in progress");
         }
     }
 

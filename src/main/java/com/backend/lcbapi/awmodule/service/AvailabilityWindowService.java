@@ -154,7 +154,7 @@ public class AvailabilityWindowService {
     public List<AvailabilityWindowResponseDto> getMyAvailabilityWindowsService() {
         LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
-        List<AvailabilityWindowEntity> windows = availabilityWindowRepo.findAllByLecturerIdAndStatus(lecturer.getId(), AvailabilityWindowStatusEnum.ACTIVE);
+        List<AvailabilityWindowEntity> windows = availabilityWindowRepo.findAllByLecturerId(lecturer.getId());
 
         return windows.stream()
                 .map(window -> {
@@ -174,14 +174,14 @@ public class AvailabilityWindowService {
 
         LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
-        AvailabilityWindowEntity window = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)
+        AvailabilityWindowEntity window = availabilityWindowRepo.findById(availabilityId)
                         .orElseThrow(() -> new NotFoundException("Availability window not found"));
 
         if (!window.getLecturer().getId().equals(lecturer.getId())) {
             throw new ForbiddenException("You cannot update this availability window");
         }
 
-        boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.AVAILABLE);
+        boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.OPENED);
 
         if (request.getMode() != null) {
             validateModeFields(request.getMode(), request.getVenue(), request.getMeetingLink(), request.getCallInstruction());
@@ -194,7 +194,7 @@ public class AvailabilityWindowService {
         } else {
             updateFullWindow(window, request);
 
-            bookableSlotRepo.deleteAllByAvailabilityWindowIdAndStatus(availabilityId, BookableSlotStatusEnum.AVAILABLE);
+            bookableSlotRepo.deleteAllByAvailabilityWindowIdAndStatus(availabilityId, BookableSlotStatusEnum.OPENED);
 
             List<BookableSlotEntity> slots = bookableSlotService.generateSlots(window);
 
@@ -336,7 +336,7 @@ public class AvailabilityWindowService {
         LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
 
-        AvailabilityWindowEntity window = availabilityWindowRepo.findByIdAndStatus(availabilityId, AvailabilityWindowStatusEnum.ACTIVE)
+        AvailabilityWindowEntity window = availabilityWindowRepo.findById(availabilityId)
                         .orElseThrow(() -> new NotFoundException("Availability window not found"));
 
 
@@ -345,7 +345,7 @@ public class AvailabilityWindowService {
         }
 
 
-        boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.AVAILABLE);
+        boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.OPENED);
 
         if (hasProcessedSlots) {
             throw new InvalidCredentialException("Cannot delete availability window because slots have already been processed");

@@ -42,9 +42,11 @@ public class Roles implements ApplicationRunner {
                 PermissionEnum.READ_PROFILE,
                 PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
                 PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
-                PermissionEnum.CREATE_BOOKING
-
-
+                PermissionEnum.CREATE_BOOKING,
+                PermissionEnum.STUDENT_VIEW_BOOKING,
+                PermissionEnum.STUDENT_VIEW_ALL_BOOKINGS,
+                PermissionEnum.CANCEL_BOOKING_WITHOUT_REASON,
+                PermissionEnum.STUDENT_CANCEL_BOOKING
 
         );
 
@@ -64,7 +66,11 @@ public class Roles implements ApplicationRunner {
                 PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
                 PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
                 PermissionEnum.UPDATE_AVAILABILITY_WINDOW,
-                PermissionEnum.DELETE_AVAILABILITY_WINDOW
+                PermissionEnum.DELETE_AVAILABILITY_WINDOW,
+                PermissionEnum.LECTURER_VIEW_BOOKING,
+                PermissionEnum.LECTURER_VIEW_ALL_BOOKINGS,
+                PermissionEnum.CANCEL_SLOT,
+                PermissionEnum.LECTURER_CANCEL_BOOKING
 
         );
 

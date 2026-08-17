@@ -18,25 +18,14 @@ public class CreateBookingResponseDto {
 
    private UUID id;
 
-   private UUID studentId;
-
    private UUID slotId;
 
    private BookingStatusEnum status;
 
    private LocalDateTime bookedAt;
 
-    private LocalDateTime cancelledAt;
-
-    private String cancellationReason;
-
     private LocalDateTime completedAt;
 
-
     private AttendanceStatusEnum attendanceStatus;
-
-   private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
 }

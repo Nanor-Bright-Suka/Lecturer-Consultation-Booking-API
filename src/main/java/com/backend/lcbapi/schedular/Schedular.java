@@ -12,6 +12,7 @@ import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import com.backend.lcbapi.booking.repo.BookingRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class Schedular {
 
 
@@ -87,12 +89,19 @@ public class Schedular {
             LocalTime currentTime = now.toLocalTime();
 
             List<BookableSlotEntity> expiredSlots = bookableSlotRepo.findExpiredSlots(
-                            BookableSlotStatusEnum.BOOKED,
+                    List.of(
+                            BookableSlotStatusEnum.OPENED,
+                            BookableSlotStatusEnum.BOOKED
+                    ),
+
                             currentDate,
                             currentTime
                     );
 
             for (BookableSlotEntity slot : expiredSlots) {
+
+                BookableSlotStatusEnum previousStatus =
+                        slot.getStatus();
 
                 /*
                  * Slot lifecycle
@@ -106,13 +115,19 @@ public class Schedular {
                  *
                  * SCHEDULED → AWAITING_OUTCOME
                  */
-                BookingEntity booking = slot.getBooking();
-
-                if (booking != null &&
-                        booking.getStatus() ==
-                                BookingStatusEnum.SCHEDULED) {
-
-                    booking.setStatus(BookingStatusEnum.AWAITING_MEETING_OUTCOME);
+                if (previousStatus == BookableSlotStatusEnum.BOOKED) {
+                    slot.getBookings()
+                            .stream()
+                            .filter(b ->
+                                    b.getStatus() == BookingStatusEnum.SCHEDULED
+                            )
+                            .findFirst()
+                            .ifPresentOrElse(
+                                    booking ->
+                                            booking.setStatus(BookingStatusEnum.AWAITING_MEETING_OUTCOME),
+                                    () -> log.warn(
+                                            "Expired BOOKED slot {} has no SCHEDULED booking",
+                                            slot.getId()));
                 }
             }
         }
@@ -120,7 +135,7 @@ public class Schedular {
 
 //    THREE DAY TIMEOUT
 @Transactional
-public void processExpiredOutcomes() {
+public void processExpiredBookingOutcomes() {
 
     LocalDateTime now = LocalDateTime.now(clock)
                     .atZone(clock.getZone())

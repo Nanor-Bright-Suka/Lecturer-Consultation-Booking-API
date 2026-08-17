@@ -2,6 +2,7 @@ package com.backend.lcbapi.awmodule.service;
 
 
 import com.backend.lcbapi.auth.entity.LecturerEntity;
+import com.backend.lcbapi.auth.service.AuthenticatedUserService;
 import com.backend.lcbapi.awmodule.dto.request.CreateAvailabilityWindowRequestDto;
 import com.backend.lcbapi.awmodule.dto.request.UpdateAvailabilityRequestDto;
 import com.backend.lcbapi.awmodule.dto.response.AvailabilityWindowResponseDto;
@@ -13,6 +14,7 @@ import com.backend.lcbapi.awmodule.enums.BookableSlotStatusEnum;
 import com.backend.lcbapi.awmodule.mapper.AvailabilityWindowMapper;
 import com.backend.lcbapi.awmodule.repo.AvailabilityWindowRepo;
 import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
+import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import com.backend.lcbapi.shared.exceptions.ForbiddenException;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
@@ -38,6 +40,9 @@ public class AvailabilityWindowService {
     private final AvailabilityWindowMapper availabilityWindowMapper;
     private final BookableSlotService bookableSlotService;
     private final BookableSlotRepo bookableSlotRepo;
+    private final AuthenticatedUserService authenticatedUserService;
+
+
 
     @Transactional
     public AvailabilityWindowResponseDto createAvailabilityWindow(CreateAvailabilityWindowRequestDto request) {
@@ -48,7 +53,14 @@ public class AvailabilityWindowService {
 
         LecturerEntity loggedInLecturer = roleContextService.getCurrentLecturer();
 
-        boolean exists = availabilityWindowRepo.existsConflict(loggedInLecturer.getId(), request.getDate(), request.getStartTime(), request.getEndTime());
+        boolean exists =
+                        availabilityWindowRepo
+                        .existsConflict(
+                        loggedInLecturer.getId(),
+                        request.getDate(),
+                        request.getStartTime(),
+                        request.getEndTime(),
+                        AvailabilityWindowStatusEnum.DELETED);
 
         if (exists) {
             throw new ConflictException("You already have an availability window during this time");
@@ -152,9 +164,10 @@ public class AvailabilityWindowService {
 
     @Transactional(readOnly = true)
     public List<AvailabilityWindowResponseDto> getMyAvailabilityWindowsService() {
-        LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
-        List<AvailabilityWindowEntity> windows = availabilityWindowRepo.findAllByLecturerId(lecturer.getId());
+        List<AvailabilityWindowEntity> windows =
+                                                 availabilityWindowRepo
+                                                 .findAllByStatusNot(AvailabilityWindowStatusEnum.DELETED);
 
         return windows.stream()
                 .map(window -> {
@@ -174,7 +187,7 @@ public class AvailabilityWindowService {
 
         LecturerEntity lecturer = roleContextService.getCurrentLecturer();
 
-        AvailabilityWindowEntity window = availabilityWindowRepo.findById(availabilityId)
+        AvailabilityWindowEntity window = availabilityWindowRepo.findByIdAndStatusNot(availabilityId, AvailabilityWindowStatusEnum.DELETED)
                         .orElseThrow(() -> new NotFoundException("Availability window not found"));
 
         if (!window.getLecturer().getId().equals(lecturer.getId())) {
@@ -184,8 +197,13 @@ public class AvailabilityWindowService {
         boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.OPENED);
 
         if (request.getMode() != null) {
-            validateModeFields(request.getMode(), request.getVenue(), request.getMeetingLink(), request.getCallInstruction());
-        }
+            validateModeFields(
+
+                    request.getMode(),
+                    request.getVenue(),
+                    request.getMeetingLink(),
+                    request.getCallInstruction());
+            }
 
         if (hasProcessedSlots) {
             validateMetadataOnly(request);
@@ -345,7 +363,14 @@ public class AvailabilityWindowService {
         }
 
 
-        boolean hasProcessedSlots = bookableSlotRepo.existsByAvailabilityWindowIdAndStatusNot(availabilityId, BookableSlotStatusEnum.OPENED);
+        boolean hasProcessedSlots =
+                                    bookableSlotRepo.existsActiveBooking(
+                                    availabilityId,
+                                    BookableSlotStatusEnum.BOOKED,
+                                    List.of(
+                                            BookingStatusEnum.SCHEDULED,
+                                            BookingStatusEnum.AWAITING_MEETING_OUTCOME
+                                    ));
 
         if (hasProcessedSlots) {
             throw new InvalidCredentialException("Cannot delete availability window because slots have already been processed");

@@ -4,6 +4,7 @@ package com.backend.lcbapi.booking.entity;
 import com.backend.lcbapi.auth.entity.StudentEntity;
 import com.backend.lcbapi.awmodule.entity.BookableSlotEntity;
 import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
+import com.backend.lcbapi.booking.enums.BaseRoleEnum;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,8 +24,8 @@ public class BookingEntity {
     @Id
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "slot_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "slot_id", nullable = false)
     private BookableSlotEntity slot;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -41,11 +42,10 @@ public class BookingEntity {
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "cancelled_by")
-    private UUID cancelledBy;
+    private BaseRoleEnum cancelledBy;
 
-    @Column(name = "cancellation_reason")
-    private String cancellationReason;
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;

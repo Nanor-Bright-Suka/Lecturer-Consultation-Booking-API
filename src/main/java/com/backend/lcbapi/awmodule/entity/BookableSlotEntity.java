@@ -9,6 +9,8 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "bookable_slot")
@@ -36,8 +38,9 @@ public class BookableSlotEntity {
     @Column(nullable = false)
     private BookableSlotStatusEnum status;
 
-    @OneToOne(mappedBy = "slot")
-    private BookingEntity booking;
+    @OneToMany(mappedBy = "slot")
+    @Builder.Default
+    private List<BookingEntity> bookings = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "availability_window_id", nullable = false)

@@ -43,7 +43,7 @@ public class ConsultationSchedular {
 
         log.debug("Processing expired booking outcomes");
 
-        schedular.processExpiredOutcomes();
+        schedular.processExpiredBookingOutcomes();
     }
 
 

@@ -45,6 +45,7 @@ public class AvailabilityWindowMapper {
                 .build();
     }
 
+
     public List<AvailabilityWindowResponseDto> toResponseList(List<AvailabilityWindowEntity> entities) {
 
         return entities.stream()

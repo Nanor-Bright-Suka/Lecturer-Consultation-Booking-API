@@ -4,6 +4,7 @@ public enum BookableSlotStatusEnum {
 
     OPENED,
     BOOKED,
+    CANCELLED,
     CLOSED
 
 

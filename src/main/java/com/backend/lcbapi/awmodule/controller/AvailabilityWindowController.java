@@ -8,6 +8,8 @@ import com.backend.lcbapi.awmodule.dto.response.AvailabilityWindowResponseDto;
 import com.backend.lcbapi.awmodule.dto.response.BookableSlotResponseDto;
 import com.backend.lcbapi.awmodule.service.AvailabilityWindowService;
 import com.backend.lcbapi.awmodule.service.BookableSlotService;
+import com.backend.lcbapi.booking.dto.response.ApiResponseDto;
+import com.backend.lcbapi.booking.dto.response.booking.CancelSlotResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -76,7 +78,27 @@ public class AvailabilityWindowController {
 
         return ResponseEntity.ok(new ApiResponse(Instant.now(), 200, "Availability Window deleted successfully"));
     }
-    
+
+
+    @PreAuthorize("hasAuthority('CANCEL_SLOT')")
+    @PostMapping("/slots/{slotId}/cancel")
+    public ResponseEntity<ApiResponseDto<CancelSlotResponseDto>> cancelSlot(@PathVariable UUID slotId) {
+
+        CancelSlotResponseDto result =
+                bookableSlotService.cancelSlotByLecturer(slotId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponseDto<>("Bookable slot cancelled successfully", result));
+    }
+
+
+
+
+
+
+
+
 
 
 

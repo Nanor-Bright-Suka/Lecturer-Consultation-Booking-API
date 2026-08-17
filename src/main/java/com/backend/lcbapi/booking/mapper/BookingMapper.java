@@ -39,39 +39,39 @@ public class BookingMapper {
 
 
         ConsultationDto consultation =
-                new ConsultationDto(
-                        slot.getDate(),
-                        slot.getStartTime(),
-                        slot.getEndTime(),
-                        availabilityWindow.getMode(),
-                        availabilityWindow.getVenue(),
-                        availabilityWindow.getMeetingLink(),
-                        availabilityWindow.getCallInstruction()
-                );
+                                        new ConsultationDto(
+                                                slot.getDate(),
+                                                slot.getStartTime(),
+                                                slot.getEndTime(),
+                                                availabilityWindow.getMode(),
+                                                availabilityWindow.getVenue(),
+                                                availabilityWindow.getMeetingLink(),
+                                                availabilityWindow.getCallInstruction()
+                                        );
 
         AttendanceOutcomeDto attendanceOutcome =
-                new AttendanceOutcomeDto(
-                        booking.getAttendanceStatus(),
-                        booking.getCompletedAt()
-                );
+                                                    new AttendanceOutcomeDto(
+                                                            booking.getAttendanceStatus(),
+                                                            booking.getCompletedAt()
+                                                    );
 
 
         LecturerDto lecturer =
-                new LecturerDto(
-                        lecturerResponse.getId(),
-                        lecturerResponse.getUser().getFirstName(),
-                        lecturerResponse.getUser().getLastName(),
-                        lecturerResponse.getDepartment()
-                );
+                                new LecturerDto(
+                                        lecturerResponse.getId(),
+                                        lecturerResponse.getUser().getFirstName(),
+                                        lecturerResponse.getUser().getLastName(),
+                                        lecturerResponse.getDepartment()
+                                );
 
         CancelBookingResponseDto cancel =
-                new CancelBookingResponseDto(
-                        booking.getId(),
-                        booking.getCancelledAt(),
-                        booking.getStatus(),
-                        booking.getSlot().getStatus(),
-                        booking.getCancelledBy()
-                );
+                                            new CancelBookingResponseDto(
+                                                    booking.getId(),
+                                                    booking.getCancelledAt(),
+                                                    booking.getStatus(),
+                                                    booking.getSlot().getStatus(),
+                                                    booking.getCancelledBy()
+                                            );
 
         return new StudentBookingResponseDto(
                 booking.getId(),

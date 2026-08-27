@@ -8,7 +8,7 @@ import com.backend.lcbapi.awmodule.enums.BookableSlotStatusEnum;
 import com.backend.lcbapi.awmodule.repo.AvailabilityWindowRepo;
 import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.booking.entity.BookingEntity;
-import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
+import com.backend.lcbapi.booking.enums.AttendanceStatus;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import com.backend.lcbapi.booking.repo.BookingRepo;
 import lombok.RequiredArgsConstructor;
@@ -158,7 +158,7 @@ public void processExpiredBookingOutcomes() {
         /*
          * No outcome was recorded within 3 days.
          */
-        booking.setAttendanceStatus(AttendanceStatusEnum.BOTH_ABSENT);
+        booking.setAttendanceStatus(AttendanceStatus.AttendanceStatusEnum.BOTH_ABSENT);
 
         booking.setStatus(BookingStatusEnum.COMPLETED);
 

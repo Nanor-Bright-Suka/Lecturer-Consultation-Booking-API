@@ -9,13 +9,19 @@ import com.backend.lcbapi.awmodule.enums.AvailabilityWindowStatusEnum;
 import com.backend.lcbapi.awmodule.enums.BookableSlotStatusEnum;
 import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.awmodule.service.RoleContextService;
+import com.backend.lcbapi.booking.dto.request.consultation.BookingConsultationRequestDto;
+import com.backend.lcbapi.booking.dto.request.consultation.CreateMeetingReportRequestDto;
+import com.backend.lcbapi.booking.dto.request.consultation.ReviewMeetingReportRequestDto;
 import com.backend.lcbapi.booking.dto.response.CreateBookingResponseDto;
 import com.backend.lcbapi.booking.dto.response.booking.*;
+import com.backend.lcbapi.booking.dto.response.consultation.*;
 import com.backend.lcbapi.booking.entity.BookingEntity;
-import com.backend.lcbapi.booking.enums.BaseRoleEnum;
-import com.backend.lcbapi.booking.enums.BookingStatusEnum;
+import com.backend.lcbapi.booking.entity.MeetingReportEntity;
+import com.backend.lcbapi.booking.enums.*;
 import com.backend.lcbapi.booking.mapper.BookingMapper;
+import com.backend.lcbapi.booking.mapper.MeetingReportMapper;
 import com.backend.lcbapi.booking.repo.BookingRepo;
+import com.backend.lcbapi.booking.repo.MeetingReportRepo;
 import com.backend.lcbapi.shared.exceptions.ConflictException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 
+
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -37,6 +46,8 @@ public class BookingService {
     private final BookableSlotRepo bookableSlotRepo;
     private final BookingMapper bookingMapper;
     private final RoleContextService roleContextService;
+    private final MeetingReportRepo meetingReportRepo;
+    private final MeetingReportMapper meetingReportMapper;
 
     private final Clock clock;
 
@@ -395,6 +406,299 @@ public class BookingService {
 
         return bookingMapper.toCancelBookingResponse(booking);
     }
+
+
+
+
+
+    @Transactional
+    public ConsultationOutcomeResponseDto recordConsultationOutcome(
+            UUID bookingId,
+            BookingConsultationRequestDto request
+    ) {
+
+
+        LecturerEntity lecturer =
+                roleContextService.getCurrentLecturer();
+
+        BookingEntity booking =
+                               bookingRepo.findBookingForLecturer(
+                                bookingId,
+                                lecturer.getId())
+                        .orElseThrow(() -> new NotFoundException("Booking not found")
+                        );
+
+        /*
+         * The lecturer can only record an outcome
+         * after the consultation period has ended
+         * and the scheduler has moved the booking
+         * into AWAITING_MEETING_OUTCOME.
+         */
+        if (booking.getStatus()
+                != BookingStatusEnum.AWAITING_MEETING_OUTCOME) {
+
+            throw new ConflictException(
+                    "Consultation outcome cannot be recorded for a booking in its current state"
+            );
+        }
+
+        AttendanceStatus.AttendanceStatusEnum attendanceStatus =
+                                                 request.getAttendanceStatus();
+
+        /*
+         * Lecturer is only allowed to record:
+         *
+         * BOTH_ATTENDED
+         * STUDENT_NO_SHOW
+         */
+        Set<AttendanceStatus.AttendanceStatusEnum> validStatuses = EnumSet.of(
+                AttendanceStatus.AttendanceStatusEnum.BOTH_ATTENDED,
+                AttendanceStatus.AttendanceStatusEnum.STUDENT_NO_SHOW
+        );
+
+        if (!validStatuses.contains(attendanceStatus)) {
+            throw new ConflictException(
+                    "Invalid attendance status for lecturer consultation outcome"
+            );
+        }
+        /*
+         * Record attendance.
+         */
+        booking.setAttendanceStatus(attendanceStatus);
+
+        /*
+         * Determine the booking's final status.
+         */
+        if (attendanceStatus == AttendanceStatus.AttendanceStatusEnum.BOTH_ATTENDED) {
+
+            booking.setStatus(BookingStatusEnum.COMPLETED);
+
+        } else {
+
+            booking.setStatus(BookingStatusEnum.NO_SHOW);
+        }
+
+        /*
+         * Record when the consultation outcome
+         * was finalized.
+         */
+        booking.setCompletedAt(
+                LocalDateTime.now(clock)
+        );
+
+        return new ConsultationOutcomeResponseDto(
+                booking.getId(),
+                booking.getStatus(),
+                booking.getAttendanceStatus(),
+                booking.getCompletedAt()
+        );
+    }
+
+
+
+
+
+
+    @Transactional
+    public MeetingReportResponseDto createMeetingReport(
+            UUID bookingId,
+            CreateMeetingReportRequestDto request
+    ) {
+
+
+        StudentEntity student =
+                roleContextService.getCurrentStudent();
+
+
+        /*
+         * Find the booking and make sure it belongs
+         * to this student.
+         */
+        BookingEntity booking =
+                                bookingRepo.findBookingForStudent(
+                                bookingId,
+                                student.getId())
+                        .orElseThrow(() -> new NotFoundException("Booking not found")
+                        );
+
+        /*
+         * A report can only be submitted while the
+         * system is waiting for the consultation outcome.
+         */
+        if (booking.getStatus() != BookingStatusEnum.AWAITING_MEETING_OUTCOME) {
+
+            throw new ConflictException(
+                    "A meeting report cannot be submitted for this booking in its current state"
+            );
+        }
+
+        /*
+         * A booking can only have one report.
+         */
+        if (meetingReportRepo.existsByBookingId(booking.getId())) {
+
+            throw new ConflictException(
+                    "A meeting report has already been submitted for this booking"
+            );
+        }
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        /*
+         * Create the report.
+         */
+        MeetingReportEntity report =
+                                    MeetingReportEntity.builder()
+                                            .id(UUID.randomUUID())
+                                            .booking(booking)
+                                            .description(request.getDescription().trim())
+                                            .status(MeetingReportStatusEnum.PENDING)
+                                            .createdAt(now)
+                                            .updatedAt(now)
+                                            .build();
+
+        /*
+         * Move booking into administrative review.
+         */
+        booking.setStatus(BookingStatusEnum.PENDING_APPROVAL);
+        booking.setAttendanceStatus(AttendanceStatus.AttendanceStatusEnum.PENDING_APPROVAL);
+
+        meetingReportRepo.save(report);
+
+        /*
+         * Booking is managed by the current transaction,
+         * so an explicit save is normally not necessary.
+         *
+         * If you prefer explicit persistence in your service,
+         * you can call bookingRepository.save(booking).
+         */
+
+        return new MeetingReportResponseDto(
+                report.getId(),
+                report.getStatus(),
+                report.getBooking().getStatus(),
+                report.getCreatedAt()
+
+        );
+    }
+
+
+
+
+    @Transactional
+    public MeetingReportReviewResponseDto reviewMeetingReport(
+            UUID reportId,
+            ReviewMeetingReportRequestDto request
+    ) {
+
+        MeetingReportEntity report =
+                                        meetingReportRepo
+                                                .findBookingById(reportId)
+                                                .orElseThrow(() -> new NotFoundException("Meeting report not found")
+                                                );
+
+        /*
+         * A report can only be reviewed once.
+         */
+        if (report.getStatus() != MeetingReportStatusEnum.PENDING) {
+
+            throw new ConflictException(
+                    "Meeting report has already been reviewed"
+            );
+        }
+
+        BookingEntity booking = report.getBooking();
+
+        /*
+         * Keep the report and booking lifecycle
+         * synchronized.
+         */
+        if (booking.getStatus() != BookingStatusEnum.PENDING_APPROVAL) {
+
+            throw new ConflictException(
+                    "Booking is not awaiting administrative approval"
+            );
+        }
+
+        /*
+         * Record who reviewed the report.
+         */
+
+
+       LocalDateTime now = LocalDateTime.now(clock);
+
+        report.setReviewedAt(now);
+        report.setUpdatedAt(now);
+
+        if (request.reason() != null) {
+            report.setReason(request.reason().trim());
+        }
+
+        /*
+         * ADMIN APPROVES STUDENT'S CLAIM
+         *
+         * Lecturer was determined to be absent.
+         */
+        if (request.decision() == MeetingReportDecisionEnum.APPROVED) {
+
+            report.setStatus(MeetingReportStatusEnum.APPROVED);
+
+            booking.setStatus(BookingStatusEnum.NO_SHOW);
+
+            booking.setAttendanceStatus(AttendanceStatus.AttendanceStatusEnum.LECTURER_NO_SHOW);
+
+        }
+
+        /*
+         * ADMIN REJECTS STUDENT'S CLAIM
+         *
+         * Lecturer absence was not confirmed.
+         */
+        else {
+
+            report.setStatus(MeetingReportStatusEnum.REJECTED);
+
+            booking.setStatus(BookingStatusEnum.COMPLETED);
+
+            booking.setAttendanceStatus(AttendanceStatus.AttendanceStatusEnum.BOTH_ATTENDED);
+        }
+
+        return new MeetingReportReviewResponseDto(
+                report.getId(),
+                report.getStatus(),
+                booking.getStatus(),
+                booking.getAttendanceStatus(),
+                report.getReviewedAt()
+
+
+        );
+    }
+
+
+
+
+    public List<MeetingReportSummaryResponseDto> getMeetingReports(MeetingReportStatusEnum status) {
+
+        return meetingReportRepo.findAllMeetingReportsForAdmin(status);
+    }
+
+
+
+        @Transactional(readOnly = true)
+        public MeetingReportDetailResponse getMeetingReport(UUID reportId) {
+
+            MeetingReportEntity report =
+                                            meetingReportRepo
+                                            .findByIdWithDetails(reportId)
+                                            .orElseThrow(() -> new NotFoundException("Meeting report not found"));
+
+            return meetingReportMapper.toDetailResponse(report);
+        }
+
+
+
+
+
+
 
 
 

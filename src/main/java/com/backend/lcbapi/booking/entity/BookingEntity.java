@@ -3,7 +3,7 @@ package com.backend.lcbapi.booking.entity;
 
 import com.backend.lcbapi.auth.entity.StudentEntity;
 import com.backend.lcbapi.awmodule.entity.BookableSlotEntity;
-import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
+import com.backend.lcbapi.booking.enums.AttendanceStatus;
 import com.backend.lcbapi.booking.enums.BaseRoleEnum;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import jakarta.persistence.*;
@@ -52,7 +52,7 @@ public class BookingEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "attendance_status")
-    private AttendanceStatusEnum attendanceStatus;
+    private AttendanceStatus.AttendanceStatusEnum attendanceStatus;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

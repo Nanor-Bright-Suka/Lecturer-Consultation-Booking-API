@@ -46,7 +46,8 @@ public class Roles implements ApplicationRunner {
                 PermissionEnum.STUDENT_VIEW_BOOKING,
                 PermissionEnum.STUDENT_VIEW_ALL_BOOKINGS,
                 PermissionEnum.CANCEL_BOOKING_WITHOUT_REASON,
-                PermissionEnum.STUDENT_CANCEL_BOOKING
+                PermissionEnum.STUDENT_CANCEL_BOOKING,
+                PermissionEnum.STUDENT_CREATE_MEETING_REPORT
 
         );
 
@@ -70,7 +71,8 @@ public class Roles implements ApplicationRunner {
                 PermissionEnum.LECTURER_VIEW_BOOKING,
                 PermissionEnum.LECTURER_VIEW_ALL_BOOKINGS,
                 PermissionEnum.CANCEL_SLOT,
-                PermissionEnum.LECTURER_CANCEL_BOOKING
+                PermissionEnum.LECTURER_CANCEL_BOOKING,
+                PermissionEnum.LECTURER_SET_BOOKING_OUTCOME
 
         );
 
@@ -86,7 +88,16 @@ public class Roles implements ApplicationRunner {
                 ));
 
         add(admin,
-                PermissionEnum.UPDATE_PROFILE
+                PermissionEnum.UPDATE_PROFILE,
+                PermissionEnum.STUDENT_VIEW_BOOKING,
+                PermissionEnum.STUDENT_VIEW_ALL_BOOKINGS,
+                PermissionEnum.VIEW_ALL_AVAILABILITY_WINDOW,
+                PermissionEnum.VIEW_ALL_BOOKABLE_SLOTS,
+                PermissionEnum.LECTURER_VIEW_BOOKING,
+                PermissionEnum.LECTURER_VIEW_ALL_BOOKINGS,
+                PermissionEnum.REVIEW_MEETING_REPORT,
+                PermissionEnum.GET_ALL_MEETING_REPORT,
+                PermissionEnum.VIEW_MEETING_REPORT
 
                 );
 

@@ -51,8 +51,7 @@ public class BookingMapper {
 
         AttendanceOutcomeDto attendanceOutcome =
                                                     new AttendanceOutcomeDto(
-                                                            booking.getAttendanceStatus(),
-                                                            booking.getCompletedAt()
+                                                            booking.getAttendanceStatus()
                                                     );
 
 
@@ -109,8 +108,7 @@ public class BookingMapper {
 
         AttendanceOutcomeDto attendanceOutcome =
                 new AttendanceOutcomeDto(
-                        booking.getAttendanceStatus(),
-                        booking.getCompletedAt()
+                        booking.getAttendanceStatus()
                 );
 
 

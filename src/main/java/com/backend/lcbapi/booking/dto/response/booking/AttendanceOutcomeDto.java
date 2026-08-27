@@ -1,11 +1,11 @@
 package com.backend.lcbapi.booking.dto.response.booking;
 
-import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
+import com.backend.lcbapi.booking.enums.AttendanceStatus;
 
 import java.time.LocalDateTime;
 
 public record AttendanceOutcomeDto(
-        AttendanceStatusEnum attendanceStatus,
-        LocalDateTime completedAt
+        AttendanceStatus.AttendanceStatusEnum attendanceStatus
+
 ) {
 }

@@ -54,7 +54,6 @@ public interface BookingRepo extends JpaRepository<BookingEntity, UUID> {
             FROM BookingEntity b
             JOIN FETCH b.slot s
             JOIN FETCH s.availabilityWindow aw
-            JOIN FETCH aw.lecturer l
             JOIN FETCH b.student st
             WHERE b.id = :bookingId
               AND st.id = :studentId

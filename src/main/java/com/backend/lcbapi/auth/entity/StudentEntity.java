@@ -29,6 +29,7 @@ public class StudentEntity {
     private UserEntity user;
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<BookingEntity> bookings = new ArrayList<>();
 
 

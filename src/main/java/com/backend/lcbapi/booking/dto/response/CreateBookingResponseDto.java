@@ -1,7 +1,7 @@
 package com.backend.lcbapi.booking.dto.response;
 
 
-import com.backend.lcbapi.booking.enums.AttendanceStatusEnum;
+import com.backend.lcbapi.booking.enums.AttendanceStatus;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +26,6 @@ public class CreateBookingResponseDto {
 
     private LocalDateTime completedAt;
 
-    private AttendanceStatusEnum attendanceStatus;
+    private AttendanceStatus.AttendanceStatusEnum attendanceStatus;
 
 }

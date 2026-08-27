@@ -1,0 +1,1994 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/availability/{availabilityId}": {
+      "put": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "updateAvailabilityWindow",
+        "parameters": [
+          {
+            "name": "availabilityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAvailabilityRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "deleteAvailabilityWindow",
+        "parameters": [
+          {
+            "name": "availabilityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/{slotId}": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "create",
+        "parameters": [
+          {
+            "name": "slotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoCreateBookingResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/{bookingId}/report": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "createMeetingReport",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMeetingReportRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoMeetingReportResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/student/{bookingId}/cancel": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "cancelStudentBooking",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoCancelBookingResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/meeting-reports/{reportId}/review": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "reviewMeetingReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewMeetingReportRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoMeetingReportReviewResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/lecturer/{bookingId}/outcome": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "recordConsultationOutcome",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingConsultationRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoConsultationOutcomeResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/lecturer/{bookingId}/cancel": {
+      "post": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "cancelLecturerBooking",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoCancelBookingResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/availability": {
+      "get": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "getMyAvailabilityWindows",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAvailabilityWindowRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/availability/slots/{slotId}/cancel": {
+      "post": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "cancelSlot",
+        "parameters": [
+          {
+            "name": "slotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoCancelSlotResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/student/register": {
+      "post": {
+        "tags": [
+          "student-controller"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentRegisterRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentRegisterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/student/login": {
+      "post": {
+        "tags": [
+          "student-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "refresh",
+        "parameters": [
+          {
+            "name": "refreshToken",
+            "in": "cookie",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "refreshToken",
+            "in": "cookie",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/lecturer/register": {
+      "post": {
+        "tags": [
+          "lecturer-controller"
+        ],
+        "operationId": "register_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LecturerRegistrationRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LecturerRegistrationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/lecturer/login": {
+      "post": {
+        "tags": [
+          "lecturer-controller"
+        ],
+        "operationId": "login_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/admin/login": {
+      "post": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "login_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminLoginRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "health-controller"
+        ],
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/student": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getAllStudentBooking",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoListStudentBookingSummaryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/student/{bookingId}": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getStudentBooking",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoStudentBookingResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/meeting-reports": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getMeetingReports",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "APPROVED",
+                "REJECTED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoListMeetingReportSummaryResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/meeting-reports/{reportId}": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getMeetingReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoMeetingReportDetailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/lecturer": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getAllLecturerBooking",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoListLecturerBookingSummaryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/booking/lecturer/{bookingId}": {
+      "get": {
+        "tags": [
+          "booking-controller"
+        ],
+        "operationId": "getLecturerBooking",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoLecturerBookingViewDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/availability/{availabilityId}/slots": {
+      "get": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "getSlots",
+        "parameters": [
+          {
+            "name": "availabilityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookableSlotResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/{userId}": {
+      "delete": {
+        "tags": [
+          "student-controller"
+        ],
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateAvailabilityRequestDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "slotDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "venue": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "IN_PERSON",
+              "PHONE_CALL"
+            ]
+          },
+          "meetingLink": {
+            "type": "string"
+          },
+          "callInstruction": {
+            "type": "string"
+          }
+        }
+      },
+      "AvailabilityWindowResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "availabilityMode": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "IN_PERSON",
+              "PHONE_CALL"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "IN_PROGRESS",
+              "DELETED",
+              "COMPLETED",
+              "CANCELLED",
+              "INACTIVE"
+            ]
+          },
+          "slotDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slotsGenerated": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDtoCreateBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreateBookingResponseDto"
+          }
+        }
+      },
+      "CreateBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "bookedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          }
+        }
+      },
+      "CreateMeetingReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "description"
+        ]
+      },
+      "ApiResponseDtoMeetingReportResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MeetingReportResponseDto"
+          }
+        }
+      },
+      "MeetingReportResponseDto": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "bookingStatus": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDtoCancelBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CancelBookingResponseDto"
+          }
+        }
+      },
+      "CancelBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bookingStatus": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "slotStatus": {
+            "type": "string",
+            "enum": [
+              "OPENED",
+              "BOOKED",
+              "CANCELLED",
+              "CLOSED"
+            ]
+          },
+          "cancelledBy": {
+            "type": "string",
+            "enum": [
+              "STUDENT",
+              "LECTURER"
+            ]
+          }
+        }
+      },
+      "ReviewMeetingReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "ApiResponseDtoMeetingReportReviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MeetingReportReviewResponseDto"
+          }
+        }
+      },
+      "MeetingReportReviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "bookingStatus": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          },
+          "reviewedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BookingConsultationRequestDto": {
+        "type": "object",
+        "properties": {
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          }
+        },
+        "required": [
+          "attendanceStatus"
+        ]
+      },
+      "ApiResponseDtoConsultationOutcomeResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ConsultationOutcomeResponseDto"
+          }
+        }
+      },
+      "ConsultationOutcomeResponseDto": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingStatus": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateAvailabilityWindowRequestDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "slotDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "venue": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "IN_PERSON",
+              "PHONE_CALL"
+            ]
+          },
+          "meetingLink": {
+            "type": "string"
+          },
+          "callInstruction": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "endTime",
+          "mode",
+          "slotDuration",
+          "startTime"
+        ]
+      },
+      "ApiResponseDtoCancelSlotResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CancelSlotResponseDto"
+          }
+        }
+      },
+      "CancelSlotResponseDto": {
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slotStatus": {
+            "type": "string",
+            "enum": [
+              "OPENED",
+              "BOOKED",
+              "CANCELLED",
+              "CLOSED"
+            ]
+          }
+        }
+      },
+      "StudentRegisterRequestDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 3
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 8
+          },
+          "studentId": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 5
+          }
+        },
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "studentId"
+        ]
+      },
+      "StudentRegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequestDto": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 0
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "identifier",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "timeStamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "LecturerRegistrationRequestDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "staffId": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "department": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 2147483647,
+            "minLength": 8
+          }
+        },
+        "required": [
+          "department",
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "staffId"
+        ]
+      },
+      "LecturerRegistrationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "staffId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminLoginRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "ApiResponseDtoListStudentBookingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentBookingSummaryDto"
+            }
+          }
+        }
+      },
+      "ConsultationDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "IN_PERSON",
+              "PHONE_CALL"
+            ]
+          },
+          "venue": {
+            "type": "string"
+          },
+          "meetingLink": {
+            "type": "string"
+          },
+          "callInstruction": {
+            "type": "string"
+          }
+        }
+      },
+      "LecturerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          }
+        }
+      },
+      "StudentBookingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "bookedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lecturer": {
+            "$ref": "#/components/schemas/LecturerDto"
+          },
+          "consultation": {
+            "$ref": "#/components/schemas/ConsultationDto"
+          }
+        }
+      },
+      "ApiResponseDtoStudentBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/StudentBookingResponseDto"
+          }
+        }
+      },
+      "AttendanceOutcomeDto": {
+        "type": "object",
+        "properties": {
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          }
+        }
+      },
+      "StudentBookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "bookedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lecturer": {
+            "$ref": "#/components/schemas/LecturerDto"
+          },
+          "consultation": {
+            "$ref": "#/components/schemas/ConsultationDto"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/AttendanceOutcomeDto"
+          },
+          "cancel": {
+            "$ref": "#/components/schemas/CancelBookingResponseDto"
+          }
+        }
+      },
+      "ApiResponseDtoListMeetingReportSummaryResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MeetingReportSummaryResponseDto"
+            }
+          }
+        }
+      },
+      "MeetingReportSummaryResponseDto": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string"
+          },
+          "lecturerName": {
+            "type": "string"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDtoMeetingReportDetailResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MeetingReportDetailResponse"
+          }
+        }
+      },
+      "BookingReportInfo": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingStatus": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "attendanceStatus": {
+            "type": "string",
+            "enum": [
+              "BOTH_ATTENDED",
+              "BOTH_ABSENT",
+              "STUDENT_NO_SHOW",
+              "LECTURER_NO_SHOW",
+              "PENDING_APPROVAL"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "IN_PERSON",
+              "PHONE_CALL"
+            ]
+          },
+          "venue": {
+            "type": "string"
+          },
+          "meetingLink": {
+            "type": "string"
+          }
+        }
+      },
+      "LecturerReportInfo": {
+        "type": "object",
+        "properties": {
+          "lecturerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "staffId": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          }
+        }
+      },
+      "MeetingReportDetailResponse": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentReportInfo"
+          },
+          "lecturer": {
+            "$ref": "#/components/schemas/LecturerReportInfo"
+          },
+          "booking": {
+            "$ref": "#/components/schemas/BookingReportInfo"
+          },
+          "review": {
+            "$ref": "#/components/schemas/ReviewReportInfo"
+          }
+        }
+      },
+      "ReviewReportInfo": {
+        "type": "object",
+        "properties": {
+          "reviewedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reviewReason": {
+            "type": "string"
+          }
+        }
+      },
+      "StudentReportInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseDtoListLecturerBookingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LecturerBookingSummaryDto"
+            }
+          }
+        }
+      },
+      "LecturerBookingSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "bookedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentDto"
+          },
+          "consultation": {
+            "$ref": "#/components/schemas/ConsultationDto"
+          }
+        }
+      },
+      "StudentDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "LastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseDtoLecturerBookingViewDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/LecturerBookingViewDto"
+          }
+        }
+      },
+      "LecturerBookingViewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "AWAITING_MEETING_OUTCOME",
+              "PENDING_APPROVAL",
+              "NO_SHOW",
+              "CANCELLED",
+              "COMPLETED"
+            ]
+          },
+          "bookedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentDto"
+          },
+          "consultation": {
+            "$ref": "#/components/schemas/ConsultationDto"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/AttendanceOutcomeDto"
+          },
+          "cancel": {
+            "$ref": "#/components/schemas/CancelBookingResponseDto"
+          }
+        }
+      },
+      "BookableSlotResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPENED",
+              "BOOKED",
+              "CANCELLED",
+              "CLOSED"
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

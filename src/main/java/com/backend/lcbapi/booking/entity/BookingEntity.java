@@ -60,7 +60,9 @@ public class BookingEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean reminderSent = false;
 
 
 

@@ -149,9 +149,22 @@ public interface BookingRepo extends JpaRepository<BookingEntity, UUID> {
 
 
 
-
-
-
+    @Query("""
+    SELECT b
+    FROM BookingEntity b
+    JOIN FETCH b.slot s
+    WHERE b.status = :status
+      AND b.reminderSent = false
+      AND s.date = :date
+      AND s.startTime >= :startTime
+      AND s.startTime < :endTime
+""")
+    List<BookingEntity> findBookingsForReminder(
+           BookingStatusEnum status,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
+    );
 
 
 

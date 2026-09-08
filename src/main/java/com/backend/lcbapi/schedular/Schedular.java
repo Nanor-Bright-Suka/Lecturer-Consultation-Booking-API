@@ -1,6 +1,8 @@
 package com.backend.lcbapi.schedular;
 
 
+import com.backend.lcbapi.auth.entity.LecturerEntity;
+import com.backend.lcbapi.auth.entity.StudentEntity;
 import com.backend.lcbapi.awmodule.entity.AvailabilityWindowEntity;
 import com.backend.lcbapi.awmodule.entity.BookableSlotEntity;
 import com.backend.lcbapi.awmodule.enums.AvailabilityWindowStatusEnum;
@@ -11,6 +13,8 @@ import com.backend.lcbapi.booking.entity.BookingEntity;
 import com.backend.lcbapi.booking.enums.AttendanceStatus;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
 import com.backend.lcbapi.booking.repo.BookingRepo;
+import com.backend.lcbapi.notification.enums.NotificationType;
+import com.backend.lcbapi.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,7 @@ public class Schedular {
     private final AvailabilityWindowRepo availabilityWindowRepo;
     private final BookableSlotRepo bookableSlotRepo;
     private final BookingRepo bookingRepo;
+    private final NotificationService notificationService;
 
 
     @Transactional
@@ -175,8 +180,52 @@ public void processExpiredBookingOutcomes() {
 
 
 
+    @Transactional
+    public void processConsultationReminders() {
 
+        LocalDateTime now = LocalDateTime.now(clock);
 
+        LocalDateTime reminderTarget = now.plusMinutes(5);
+
+        LocalDate date = reminderTarget.toLocalDate();
+        LocalTime startTime = reminderTarget.toLocalTime();
+        LocalTime endTime = startTime.plusMinutes(1);
+
+        List<BookingEntity> bookings =
+                bookingRepo.findBookingsForReminder(
+                        BookingStatusEnum.SCHEDULED,
+                        date,
+                        startTime,
+                        endTime
+                );
+
+        for (BookingEntity booking : bookings) {
+
+            StudentEntity student = booking.getStudent();
+
+            LecturerEntity lecturer =
+                    booking.getSlot()
+                            .getAvailabilityWindow()
+                            .getLecturer();
+
+            notificationService.createNotification(
+                    student.getUser(),
+                    "Consultation Reminder",
+                    "Your consultation starts in 5 minutes.",
+                    NotificationType.CONSULTATION_REMINDER
+            );
+
+            notificationService.createNotification(
+                    lecturer.getUser(),
+                    "Consultation Reminder",
+                    "You have a consultation starting in 5 minutes.",
+                    NotificationType.CONSULTATION_REMINDER
+            );
+
+            booking.setReminderSent(true);
+            booking.setUpdatedAt(now);
+        }
+    }
 
 
 

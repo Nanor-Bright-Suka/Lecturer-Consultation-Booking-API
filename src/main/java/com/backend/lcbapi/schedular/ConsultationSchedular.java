@@ -47,6 +47,17 @@ public class ConsultationSchedular {
     }
 
 
+    @Scheduled(
+            fixedRateString ="${app.scheduler.consultation-reminders}"
+    )
+    public void processConsultationReminders() {
+
+        log.debug("Processing consultation reminders");
+
+        schedular.processConsultationReminders();
+    }
+
+
 
 
 

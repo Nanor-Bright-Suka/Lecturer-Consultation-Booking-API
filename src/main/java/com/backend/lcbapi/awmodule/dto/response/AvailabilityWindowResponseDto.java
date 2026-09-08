@@ -36,4 +36,6 @@ public class AvailabilityWindowResponseDto {
 
     private Instant updatedAt;
 
+    private LecturerAvailabilitySummaryDto lecturerAvailabilitySummaryDto;
+
 }

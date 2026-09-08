@@ -2,7 +2,7 @@
 
 services:
   server:
-    container_name: lecturer-consultation-booking-service-container
+    container_name: lecturer-consultation-booking-NotificationService-container
     image: lecturer-consultation-booking-image
     build:
       context: .

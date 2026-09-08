@@ -15,6 +15,8 @@ import com.backend.lcbapi.awmodule.mapper.AvailabilityWindowMapper;
 import com.backend.lcbapi.awmodule.repo.AvailabilityWindowRepo;
 import com.backend.lcbapi.awmodule.repo.BookableSlotRepo;
 import com.backend.lcbapi.booking.enums.BookingStatusEnum;
+import com.backend.lcbapi.notification.enums.NotificationType;
+import com.backend.lcbapi.notification.service.NotificationService;
 import com.backend.lcbapi.shared.exceptions.ForbiddenException;
 import com.backend.lcbapi.shared.exceptions.InvalidCredentialException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
@@ -163,7 +165,7 @@ public class AvailabilityWindowService {
 
 
     @Transactional(readOnly = true)
-    public List<AvailabilityWindowResponseDto> getMyAvailabilityWindowsService() {
+    public List<AvailabilityWindowResponseDto> getAllAvailabilityWindowsService() {
 
         List<AvailabilityWindowEntity> windows =
                                                  availabilityWindowRepo
@@ -179,6 +181,33 @@ public class AvailabilityWindowService {
                 })
                 .toList();
     }
+
+
+    @Transactional(readOnly = true)
+    public List<AvailabilityWindowResponseDto> getMyAvailabilityWindowsService() {
+
+        LecturerEntity loggedInLecturer =
+                roleContextService.getCurrentLecturer();
+
+        List<AvailabilityWindowEntity> windows =
+                                                availabilityWindowRepo.findAllByLecturerAndStatusNot(
+                                                                loggedInLecturer,
+                                                                AvailabilityWindowStatusEnum.DELETED
+                                                        );
+
+        return windows.stream()
+                .map(window -> {
+                    AvailabilityWindowResponseDto dto = availabilityWindowMapper.toDto(window);
+
+                    long generatedSlots = bookableSlotRepo.countByAvailabilityWindowId(window.getId());
+
+                    dto.setSlotsGenerated((int) generatedSlots);
+
+                    return dto;
+                })
+                .toList();
+    }
+
 
 
 

@@ -2,12 +2,12 @@ package com.backend.lcbapi.auth.entity;
 
 
 import com.backend.lcbapi.auth.enums.RoleEnum;
+//import com.backend.lcbapi.notification.entity.NotificationEntity;
+import com.backend.lcbapi.notification.entity.NotificationEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @Table(name = "my_users")
@@ -55,6 +55,16 @@ public class UserEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private LecturerEntity lecturer;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<NotificationEntity> notifications = new ArrayList<>();
+
+
 
     public void addRole(RoleEntity role) {
         this.roles.add(role);

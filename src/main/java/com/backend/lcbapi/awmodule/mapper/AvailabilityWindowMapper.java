@@ -1,8 +1,10 @@
 package com.backend.lcbapi.awmodule.mapper;
 
 
+import com.backend.lcbapi.auth.entity.LecturerEntity;
 import com.backend.lcbapi.awmodule.dto.request.CreateAvailabilityWindowRequestDto;
 import com.backend.lcbapi.awmodule.dto.response.AvailabilityWindowResponseDto;
+import com.backend.lcbapi.awmodule.dto.response.LecturerAvailabilitySummaryDto;
 import com.backend.lcbapi.awmodule.entity.AvailabilityWindowEntity;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,15 @@ public class AvailabilityWindowMapper {
     }
 
     public AvailabilityWindowResponseDto toDto(AvailabilityWindowEntity entity) {
+        LecturerEntity lecturer = entity.getLecturer();
+
+        LecturerAvailabilitySummaryDto lecturerDto = LecturerAvailabilitySummaryDto.builder()
+                .id(lecturer.getId())
+                .firstName(lecturer.getUser().getFirstName())
+                .lastName(lecturer.getUser().getLastName())
+                .department(lecturer.getDepartment())
+                .build();
+
 
         return AvailabilityWindowResponseDto.builder()
                 .id(entity.getId())
@@ -39,6 +50,7 @@ public class AvailabilityWindowMapper {
                 .endTime(entity.getEndTime())
                 .slotDuration(entity.getSlotDuration())
                 .status(entity.getStatus())
+                .lecturerAvailabilitySummaryDto(lecturerDto)
                 .availabilityMode(entity.getMode())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

@@ -124,8 +124,6 @@ public class BookableSlotService {
         }
 
 
-
-
         slot.setStatus(BookableSlotStatusEnum.CANCELLED);
 
         bookableSlotRepo.save(slot);

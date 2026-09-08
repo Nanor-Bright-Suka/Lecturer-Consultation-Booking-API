@@ -1,5 +1,6 @@
 package com.backend.lcbapi.awmodule.repo;
 
+import com.backend.lcbapi.auth.entity.LecturerEntity;
 import com.backend.lcbapi.awmodule.entity.AvailabilityWindowEntity;
 import com.backend.lcbapi.awmodule.enums.AvailabilityWindowStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +14,12 @@ import java.util.UUID;
 
 public interface AvailabilityWindowRepo extends JpaRepository<AvailabilityWindowEntity, UUID> {
 
-    List<AvailabilityWindowEntity> findAllByLecturerId(UUID lecturerId);
+    List<AvailabilityWindowEntity> findAllByLecturerAndStatusNot(
+            LecturerEntity lecturer,
+            AvailabilityWindowStatusEnum  status);
 
 
     void deleteByLecturerId(UUID id);
-
 
 
     List<AvailabilityWindowEntity> findAllByStatusNot(AvailabilityWindowStatusEnum status);

@@ -40,8 +40,17 @@ public class AvailabilityWindowController {
     }
 
 
-    @GetMapping
+    @GetMapping("/view-all")
     @PreAuthorize("hasAuthority('VIEW_ALL_AVAILABILITY_WINDOW')")
+    public ResponseEntity<List<AvailabilityWindowResponseDto>> getAllAvailabilityWindows() {
+
+        List<AvailabilityWindowResponseDto> response = availabilityWindowService.getAllAvailabilityWindowsService();
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/my-windows")
+    @PreAuthorize("hasAuthority('VIEW_ALL_MY_AVAILABILITY_WINDOW')")
     public ResponseEntity<List<AvailabilityWindowResponseDto>> getMyAvailabilityWindows() {
 
         List<AvailabilityWindowResponseDto> response = availabilityWindowService.getMyAvailabilityWindowsService();

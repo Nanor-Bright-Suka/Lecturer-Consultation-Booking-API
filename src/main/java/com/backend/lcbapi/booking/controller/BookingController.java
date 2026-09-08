@@ -41,7 +41,7 @@ public class BookingController {
     public ResponseEntity<ApiResponseDto<StudentBookingResponseDto>> getStudentBooking(@PathVariable UUID bookingId) {
 
         StudentBookingResponseDto booking = bookingService.getStudentBooking(bookingId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>("Booking retrieved successfully", booking));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>("Bookings retrieved successfully", booking));
 
     }
 
@@ -50,7 +50,7 @@ public class BookingController {
     public ResponseEntity<ApiResponseDto<LecturerBookingViewDto>> getLecturerBooking(@PathVariable UUID bookingId) {
 
         LecturerBookingViewDto booking = bookingService.getLecturerBooking(bookingId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>("Booking retrieved successfully", booking));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>("Bookings retrieved successfully", booking));
 
     }
 

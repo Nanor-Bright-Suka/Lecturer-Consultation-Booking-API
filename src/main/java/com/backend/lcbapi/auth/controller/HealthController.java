@@ -17,7 +17,7 @@ public class HealthController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> health() {
-        return ResponseEntity.ok(new ApiResponse(Instant.now(), 200, "Hello from the health service, I'm working perfectly well"));
+        return ResponseEntity.ok(new ApiResponse(Instant.now(), 200, "Hello from the health NotificationService, I'm working perfectly well"));
     }
 
 

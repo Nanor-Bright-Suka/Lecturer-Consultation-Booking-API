@@ -3,6 +3,9 @@ package com.backend.lcbapi.booking.service;
 
 import com.backend.lcbapi.auth.entity.LecturerEntity;
 import com.backend.lcbapi.auth.entity.StudentEntity;
+import com.backend.lcbapi.auth.entity.UserEntity;
+import com.backend.lcbapi.auth.enums.RoleEnum;
+import com.backend.lcbapi.auth.repo.UserRepository;
 import com.backend.lcbapi.awmodule.entity.AvailabilityWindowEntity;
 import com.backend.lcbapi.awmodule.entity.BookableSlotEntity;
 import com.backend.lcbapi.awmodule.enums.AvailabilityWindowStatusEnum;
@@ -22,6 +25,8 @@ import com.backend.lcbapi.booking.mapper.BookingMapper;
 import com.backend.lcbapi.booking.mapper.MeetingReportMapper;
 import com.backend.lcbapi.booking.repo.BookingRepo;
 import com.backend.lcbapi.booking.repo.MeetingReportRepo;
+import com.backend.lcbapi.notification.enums.NotificationType;
+import com.backend.lcbapi.notification.service.NotificationService;
 import com.backend.lcbapi.shared.exceptions.ConflictException;
 import com.backend.lcbapi.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +53,9 @@ public class BookingService {
     private final RoleContextService roleContextService;
     private final MeetingReportRepo meetingReportRepo;
     private final MeetingReportMapper meetingReportMapper;
+    private final NotificationService notificationService;
+    private final UserRepository userRepository;
+
 
     private final Clock clock;
 
@@ -96,6 +104,17 @@ public class BookingService {
         // 10. Save booking
         BookingEntity savedBooking = bookingRepo.save(booking);
 
+        LecturerEntity lecturer =
+                   slot.getAvailabilityWindow().getLecturer();
+
+        notificationService.createNotification(
+                lecturer.getUser(),
+                "New Booking",
+                student.getUser().getFirstName()+ " " +
+                        student.getUser().getLastName() +
+                        " has booked a consultation.",
+                NotificationType.BOOKING_CREATED
+        );
         // 11. Map to response
         return bookingMapper.toResponseDto(savedBooking);
     }
@@ -343,7 +362,17 @@ public class BookingService {
          * slot is managed by the same transaction,
          * so its change will be persisted as well.
          */
+        LecturerEntity lecturer =
+                slot.getAvailabilityWindow().getLecturer();
 
+        notificationService.createNotification(
+                lecturer.getUser(),
+                "Booking Cancellation",
+                student.getUser().getFirstName()+ " " +
+                        student.getUser().getLastName() +
+                        " has cancelled their booking.",
+                NotificationType.BOOKING_CANCELLED
+        );
         return bookingMapper.toCancelBookingResponse(booking);
     }
 
@@ -403,6 +432,17 @@ public class BookingService {
         slot.setStatus(BookableSlotStatusEnum.CANCELLED);
 
         bookingRepo.save(booking);
+
+
+        StudentEntity student = booking.getStudent();
+        notificationService.createNotification(
+                student.getUser(),
+                "Booking Cancellation",
+                lecturer.getUser().getFirstName()+ " " +
+                        lecturer.getUser().getLastName() +
+                        " has cancelled their booking.",
+                NotificationType.BOOKING_CANCELLED
+        );
 
         return bookingMapper.toCancelBookingResponse(booking);
     }
@@ -484,6 +524,14 @@ public class BookingService {
          */
         booking.setCompletedAt(
                 LocalDateTime.now(clock)
+        );
+
+        StudentEntity student = booking.getStudent();
+        notificationService.createNotification(
+                student.getUser(),
+                "Outcome Of Consultation",
+                "Your lecturer has submitted the outcome of the consultation",
+                NotificationType.CONSULTATION_OUTCOME
         );
 
         return new ConsultationOutcomeResponseDto(
@@ -568,9 +616,19 @@ public class BookingService {
          * Booking is managed by the current transaction,
          * so an explicit save is normally not necessary.
          *
-         * If you prefer explicit persistence in your service,
+         * If you prefer explicit persistence in your NotificationService,
          * you can call bookingRepository.save(booking).
          */
+        UserEntity admin = userRepository.findFirstByRoles_RoleName(RoleEnum.ROLE_ADMIN)
+                .orElseThrow(() -> new NotFoundException("Admin user not found"));
+
+        notificationService.createNotification(
+                admin,
+                "New Meeting Report",
+                student.getUser().getFirstName() + " " + student.getUser().getLastName()
+                        + " has submitted a meeting report for a consultation.",
+                NotificationType.MEETING_REPORT_CREATED
+        );
 
         return new MeetingReportResponseDto(
                 report.getId(),
@@ -662,6 +720,13 @@ public class BookingService {
             booking.setAttendanceStatus(AttendanceStatus.AttendanceStatusEnum.BOTH_ATTENDED);
         }
 
+        StudentEntity student = booking.getStudent();
+        notificationService.createNotification(
+                student.getUser(),
+                "Outcome Of Meeting Report",
+                "Your Meeting Report Outcome is ready",
+                NotificationType.MEETING_REPORT_OUTCOME
+        );
         return new MeetingReportReviewResponseDto(
                 report.getId(),
                 report.getStatus(),
@@ -677,7 +742,6 @@ public class BookingService {
 
 
     public List<MeetingReportSummaryResponseDto> getMeetingReports(MeetingReportStatusEnum status) {
-
         return meetingReportRepo.findAllMeetingReportsForAdmin(status);
     }
 

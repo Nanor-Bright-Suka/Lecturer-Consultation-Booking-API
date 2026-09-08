@@ -1,0 +1,14 @@
+package com.backend.lcbapi.notification.enums;
+
+public enum NotificationType {
+
+    BOOKING_CREATED,
+    BOOKING_CANCELLED,
+    BOOKING_CONFIRMED,
+    CONSULTATION_REMINDER,
+    CONSULTATION_CANCELLED,
+    CONSULTATION_OUTCOME,
+    MEETING_REPORT_CREATED,
+    MEETING_REPORT_OUTCOME
+
+}

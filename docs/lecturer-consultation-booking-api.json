@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Lecture Consultation Booking Api",
+    "title": "OpenAPI definition",
     "version": "v0"
   },
   "servers": [
@@ -303,27 +303,6 @@
       }
     },
     "/api/v1/availability": {
-      "get": {
-        "tags": [
-          "availability-window-controller"
-        ],
-        "operationId": "getMyAvailabilityWindows",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "availability-window-controller"
@@ -594,6 +573,57 @@
         }
       }
     },
+    "/api/v1/notifications": {
+      "get": {
+        "tags": [
+          "notification-controller"
+        ],
+        "operationId": "getAllNotifications",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoListNotificationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/{notificationId}": {
+      "get": {
+        "tags": [
+          "notification-controller"
+        ],
+        "operationId": "getNotification",
+        "parameters": [
+          {
+            "name": "notificationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDtoNotificationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/health": {
       "get": {
         "tags": [
@@ -816,6 +846,52 @@
         }
       }
     },
+    "/api/v1/availability/view-all": {
+      "get": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "getAllAvailabilityWindows",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/availability/my-windows": {
+      "get": {
+        "tags": [
+          "availability-window-controller"
+        ],
+        "operationId": "getMyAvailabilityWindows",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailabilityWindowResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/{userId}": {
       "delete": {
         "tags": [
@@ -937,6 +1013,27 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "lecturerAvailabilitySummaryDto": {
+            "$ref": "#/components/schemas/LecturerAvailabilitySummaryDto"
+          }
+        }
+      },
+      "LecturerAvailabilitySummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
           }
         }
       },
@@ -1492,6 +1589,63 @@
           "email",
           "password"
         ]
+      },
+      "ApiResponseDtoListNotificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationResponseDto"
+            }
+          }
+        }
+      },
+      "NotificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "notificationType": {
+            "type": "string",
+            "enum": [
+              "BOOKING_CREATED",
+              "BOOKING_CANCELLED",
+              "BOOKING_CONFIRMED",
+              "CONSULTATION_REMINDER",
+              "CONSULTATION_CANCELLED",
+              "CONSULTATION_OUTCOME",
+              "MEETING_REPORT_CREATED",
+              "MEETING_REPORT_OUTCOME"
+            ]
+          },
+          "notificationTitle": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDtoNotificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/NotificationResponseDto"
+          }
+        }
       },
       "ApiResponseDtoListStudentBookingSummaryDto": {
         "type": "object",
